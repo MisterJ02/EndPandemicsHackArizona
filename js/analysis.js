@@ -23,10 +23,37 @@ function _buildContext() {
       haversineMi(userLat, userLng, a.lat, a.lng) - haversineMi(userLat, userLng, b.lat, b.lng)
     )[0];
   }
-
+  const cdcAlerts = window.cdcData || [];
+  const relevantCDC = getRelevantCDCAlerts(cdcAlerts);
   const whoAlerts = window.whoData || [];
 
-  return { nearby, allClose, dCount, sCount, sorted, avgDist, closest, whoAlerts };
+  return { nearby, allClose, dCount, sCount, sorted, avgDist, closest, whoAlerts, cdcAlerts, relevantCDC };
+}
+
+function getRelevantCDCAlerts(cdcAlerts) {
+  const keywords = [
+    'arizona',
+    'southwest',
+    'united states',
+    'u.s.',
+    'us',
+    'cdc',
+    'measles',
+    'flu',
+    'influenza',
+    'covid',
+    'tick',
+    'mosquito',
+    'west nile',
+    'salmonella',
+    'e. coli',
+    'outbreak'
+  ];
+
+  return cdcAlerts.filter(item => {
+    const text = `${item.title || ''} ${item.description || ''}`.toLowerCase();
+    return keywords.some(word => text.includes(word));
+  });
 }
 
 // ── Rule-based fallback ───────────────────────────────────────────────────────
@@ -70,7 +97,11 @@ function _buildPrompt(ctx) {
     ? ctx.sorted.map(([d, c]) => `${d}: ${c} case${c > 1 ? 's' : ''}`).join(', ')
     : 'none';
 
-  return `You are a public health risk analyst. Based on the following outbreak simulation data, write a 2-3 sentence plain-English assessment for a member of the public. Be direct, factual, and concise — no markdown, no bullet points, no headers.
+  const cdcSummary = ctx.relevantCDC && ctx.relevantCDC.length
+    ? ctx.relevantCDC.slice(0, 3).map(a => a.title || 'Untitled CDC update').join(', ')
+    : 'none';
+
+  return `You are a public health risk analyst. Based on the following outbreak simulation data, write a 2-3 sentence plain-English assessment for a member of the public. Only mention CDC or WHO alerts if they are relevant to the user's risk context. Be direct, factual, and concise — no markdown, no bullet points, no headers.
 
 Data:
 - Risk score: ${riskScore} / 100
@@ -81,7 +112,7 @@ Data:
 - Average distance to nearby reports: ${ctx.avgDist != null ? ctx.avgDist.toFixed(1) + ' miles' : 'N/A'}
 - Total reports in system: ${reports.length}
 - WHO alerts: ${ctx.whoAlerts.length}
-
+- Relevant CDC updates: ${cdcSummary}
 Assessment:`;
 }
 

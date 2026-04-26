@@ -24,7 +24,9 @@ function _buildContext() {
     )[0];
   }
 
-  return { nearby, allClose, dCount, sCount, sorted, avgDist, closest };
+  const whoAlerts = window.whoData || [];
+
+  return { nearby, allClose, dCount, sCount, sorted, avgDist, closest, whoAlerts };
 }
 
 // ── Rule-based fallback ───────────────────────────────────────────────────────
@@ -78,6 +80,7 @@ Data:
 - Severity counts (nearby): low=${ctx.sCount.low}, medium=${ctx.sCount.medium}, high=${ctx.sCount.high}
 - Average distance to nearby reports: ${ctx.avgDist != null ? ctx.avgDist.toFixed(1) + ' miles' : 'N/A'}
 - Total reports in system: ${reports.length}
+- WHO alerts: ${ctx.whoAlerts.length}
 
 Assessment:`;
 }

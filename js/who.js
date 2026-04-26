@@ -5,7 +5,16 @@ async function loadWHOData() {
   try {
     const res = await fetch('https://www.who.int/api/emergencies/diseaseoutbreaknews');
     const data = await res.json();
-    const items = data.value || data.Items || [];
+    const items = (data.value || data.Items || [])
+  .sort((a, b) => {
+    const dateA = new Date(
+      a.PublicationDate || a.DatePublished || a.LastModified || a.Date || 0
+    );
+    const dateB = new Date(
+      b.PublicationDate || b.DatePublished || b.LastModified || b.Date || 0
+    );
+    return dateB - dateA; // newest first
+  });
     window.whoData = items;
 
     if (!items.length) {

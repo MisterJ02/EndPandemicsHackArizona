@@ -100,15 +100,39 @@
         </div>
       </div>
     </div>
-    <!-- WHO Outbreak News -->
+
+<!-- Who and CDC News -->
+<div class="card">
+  <div class="card-title">Outbreak Intelligence</div>
+
+  <!-- Tabs -->
+  <div class="news-tabs">
+    <button class="tab-btn active" onclick="switchNewsTab('cdc')">CDC</button>
+    <button class="tab-btn" onclick="switchNewsTab('who')">WHO</button>
+    
+  </div>
+
+  <!-- Panels -->
+   
+  <div id="who-panel" class="news-panel">
+    <div class="loading">Loading WHO data...</div>
+  </div>
+
+  <div id="cdc-panel" class="news-panel active">
+    <div class="loading">Loading CDC data...</div>
+  </div>
+</div>
+
+    <!-- CDC Latest News -->
   <div class="card">
-    <div class="card-title">WHO Outbreak Alerts</div>
-    <div id="who-panel">
+  <div class="card-title">CDC Latest News</div>
+    <div id="cdc-panel">
       <div style="text-align:center;color:var(--muted);font-size:13px;padding:18px 0;">
-        Loading WHO data...
+        Loading CDC news...
       </div>
     </div>
   </div>
+
 
     <!-- Controls -->
     <div class="card" style="padding:12px 14px;">
@@ -152,6 +176,8 @@
 <script src="js/breakdown.js"></script>
 <script src="js/map.js"></script>
 <script src="js/who.js"></script>
+<script src="js/cdc.js"></script>
+<script src="js/newsTabs.js"></script>
 <script src="js/main.js"></script>
 
 </body>

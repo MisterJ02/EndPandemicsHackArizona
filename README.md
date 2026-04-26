@@ -39,6 +39,8 @@ clone https://github.com/MisterJ02/EndPandemicsHackArizona.git
 ### 2. Demos
 Download the apk
 
+For use of js version simply run index.html
+
 Or go to https://outbreak-buddy-16.lovable.app/
 
 ## 👤 Authors

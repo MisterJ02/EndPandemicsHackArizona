@@ -90,8 +90,10 @@ function init() {
   initGauge();
   initMap();
   _initKeyStatus();
+  
   updateAll();
 
+  loadWHOData();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {

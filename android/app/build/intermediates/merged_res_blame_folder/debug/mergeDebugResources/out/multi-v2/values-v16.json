@@ -1,0 +1,38 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.endpandemics.riskmonitor.app-mergeDebugResources-18:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "/home/jarrod/.gradle/caches/8.14/transforms/0d1b3ac989c09d863450aaee3e72502f/transformed/core-1.9.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "65",
+                        "endOffsets": "116"
+                    }
+                },
+                {
+                    "source": "/home/jarrod/.gradle/caches/8.14/transforms/50f40263fada26ffa617a7f8ca8141c2/transformed/appcompat-1.6.1/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "121",
+                        "endLines": "6",
+                        "endColumns": "12",
+                        "endOffsets": "289"
+                    }
+                }
+            ]
+        }
+    ]
+}

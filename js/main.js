@@ -94,6 +94,8 @@ function init() {
   updateAll();
 
   loadWHOData();
+  loadCDCData();
+  
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {

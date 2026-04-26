@@ -1,174 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arizona Disease Outbreak Risk Monitor</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- TODO: Set the document title to the name of your application -->
+    <title>Lovable App</title>
+    <meta name="description" content="Lovable Generated Project" />
+    <meta name="author" content="Lovable" />
 
-<!-- ══════════════════ HEADER ══════════════════ -->
-<header>
-  <div class="brand">
-    <h1>Arizona Outbreak <span>Risk Monitor</span></h1>
-    <small>Interactive Simulation &bull; Mock Data Only</small>
-  </div>
-  <div class="hdr-stats">
-    <div class="hstat">
-      <div class="hstat-val" id="hstat-total">0</div>
-      <div class="hstat-lbl">Reports</div>
-    </div>
-    <div class="hstat">
-      <div class="hstat-val" id="hstat-nearby">0</div>
-      <div class="hstat-lbl">Within 5mi</div>
-    </div>
-    <div class="hstat">
-      <div class="hstat-val" id="hstat-level" style="color:#22c55e">LOW</div>
-      <div class="hstat-lbl">Risk Level</div>
-    </div>
-  </div>
-</header>
+    <!-- TODO: Update og:title to match your application name -->
+    <meta property="og:title" content="Lovable App" />
+    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-<!-- ══════════════════ MAIN ══════════════════ -->
-<div class="main">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lovable" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
 
-  <!-- ── Sidebar ── -->
-  <div class="sidebar">
-
-    <!-- Gauge -->
-    <div class="card">
-      <div class="card-title">Current Risk Level</div>
-      <div class="gauge-wrap">
-        <svg id="gauge-svg" viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg">
-          <g id="g-bands"></g>
-          <g id="g-ticks"></g>
-          <!-- Needle (initially -90° = pointing left = score 0) -->
-          <g id="g-needle" transform="rotate(-90, 150, 150)">
-            <polygon points="150,48 146,150 154,150" fill="#0f172a" opacity="0.92"/>
-            <polygon points="150,55 147.5,150 152.5,150" fill="rgba(59,130,246,0.25)"/>
-            <circle cx="150" cy="150" r="9" fill="#0f172a"/>
-            <circle cx="150" cy="150" r="5" fill="white"/>
-            <circle cx="150" cy="150" r="2" fill="#3b82f6"/>
-          </g>
-          <text id="g-score" x="150" y="172" text-anchor="middle"
-                font-size="28" font-weight="900" fill="#22c55e" font-family="system-ui">0</text>
-          <text id="g-label" x="150" y="184" text-anchor="middle"
-                font-size="9" font-weight="700" fill="#64748b"
-                font-family="system-ui" letter-spacing="1">NO DATA</text>
-        </svg>
-        <div class="zones">
-          <div class="zone z-low active" id="z-low">Low</div>
-          <div class="zone z-mod"        id="z-mod">Mod</div>
-          <div class="zone z-elev"       id="z-elev">High</div>
-          <div class="zone z-high"       id="z-high">Alert</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI analysis -->
-    <div class="card">
-      <div class="card-title">AI Risk Analysis</div>
-      <div class="ai-box">
-        <div class="ai-tag"><span class="ai-dot"></span>Analysis Engine</div>
-        <div class="ai-text" id="ai-text">
-          Click anywhere on the map to add a disease report. The system will analyze nearby clusters and compute your outbreak risk in real-time.
-        </div>
-      </div>
-      <!-- API key input -->
-      <div class="ai-key-row">
-        <input
-          type="password"
-          id="ai-key-input"
-          class="ai-key-input"
-          placeholder="Google AI Studio key…"
-          onkeydown="if(event.key==='Enter') saveApiKey()"
-        />
-        <button class="ai-key-save" onclick="saveApiKey()">Save</button>
-        <button class="ai-key-clear" onclick="clearApiKey()" title="Remove key">✕</button>
-      </div>
-      <div class="ai-key-status" id="ai-key-status">○ Rule-based mode</div>
-    </div>
-
-    <!-- Disease breakdown -->
-    <div class="card">
-      <div class="card-title">Disease Breakdown</div>
-      <div id="breakdown-panel">
-        <div style="text-align:center;color:var(--muted);font-size:13px;padding:18px 0;">
-          No reports yet. Add reports to see breakdown.
-        </div>
-      </div>
-    </div>
-
-<!-- Who and CDC News -->
-<div class="card">
-  <div class="card-title">Outbreak Intelligence</div>
-
-  <!-- Tabs -->
-  <div class="news-tabs">
-    <button class="tab-btn active" onclick="switchNewsTab('cdc')">CDC</button>
-    <button class="tab-btn" onclick="switchNewsTab('who')">WHO</button>
-    
-  </div>
-
-  <!-- Panels -->
-   
-  <div id="who-panel" class="news-panel">
-    <div class="loading">Loading WHO data...</div>
-  </div>
-
-  <div id="cdc-panel" class="news-panel active">
-    <div class="loading">Loading CDC data...</div>
-  </div>
-</div>
-
-
-    <!-- Controls -->
-    <div class="card" style="padding:12px 14px;">
-      <div class="card-title" style="margin-bottom:8px;">Controls</div>
-      <div class="ctrl-row">
-        <button class="ctrl-btn" id="loc-btn" onclick="toggleLocMode()">📍 Set My Location</button>
-        <button class="ctrl-btn danger" onclick="clearReports()">🗑 Clear Reports</button>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.5;">
-        Click map to add reports &bull; Toggle location mode to reposition yourself
-      </div>
-    </div>
-
-  </div><!-- /sidebar -->
-
-  <!-- ── Map ── -->
-  <div class="map-wrap">
-    <div id="map"></div>
-    <div class="map-hint" id="map-hint">Click anywhere on the map to add a report</div>
-    <div class="map-legend">
-      <div class="leg-title">Severity</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#22c55e"></div>Low</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#eab308"></div>Medium</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#ef4444"></div>High</div>
-      <div class="leg-sep"></div>
-      <div class="leg-title">Special</div>
-      <div class="leg-row"><div class="leg-dot" style="background:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,0.35)"></div>Your Location</div>
-    </div>
-  </div>
-
-</div><!-- /main -->
-
-<!-- Scripts loaded in dependency order -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/config.js"></script>
-<script src="js/state.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/risk.js"></script>
-<script src="js/gauge.js"></script>
-<script src="js/analysis.js"></script>
-<script src="js/breakdown.js"></script>
-<script src="js/map.js"></script>
-<script src="js/who.js"></script>
-<script src="js/cdc.js"></script>
-<script src="js/newsTabs.js"></script>
-<script src="js/main.js"></script>
-
-</body>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
